@@ -31,6 +31,8 @@ class AddPhotoActivity : AppCompatActivity() {
         this.supportActionBar?.hide() // hides the toolbar from home page
 
         checkPermissions()
+        binding.backButton3.setOnClickListener { navToToDo() }
+        binding.nextButton.setOnClickListener { navToHome() }
         binding.takePhotoButton.setOnClickListener {
             if (permissionGranted) {
                 val openCameraIntent: Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -40,6 +42,7 @@ class AddPhotoActivity : AppCompatActivity() {
                 Toast.makeText(this,"No Permission", Toast.LENGTH_LONG).show()
             }
         }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -80,5 +83,16 @@ class AddPhotoActivity : AppCompatActivity() {
         }
     }
 
+    private fun navToHome(){
+        // go to the home page
+        val intent: Intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun navToToDo(){
+        // go to the to-do page
+        val intent: Intent = Intent(this, ToDoListActivity::class.java)
+        startActivity(intent)
+    }
 
 }
