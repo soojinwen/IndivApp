@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -16,8 +17,8 @@ class ToDoListActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityToDoListBinding
 
-    public var cameraPermissionGranted = false
-    public val cameraPermissionCode = 100
+    public var permissionGranted = false
+    public val permissionCode = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,14 +30,22 @@ class ToDoListActivity : AppCompatActivity() {
 
         binding.backButton.setOnClickListener { navToHome() }
         checkPermissions()
-        binding.cameraButton.setOnClickListener { openCamera() }
+        binding.cameraButton.setOnClickListener {
+            if (permissionGranted) {
+                openCamera()
+            }
+            else {
+                Toast.makeText(this,"No Permission", Toast.LENGTH_LONG).show()
+            }
+        }
+
     }
 
     fun checkPermissions(){
         val camera = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
 
         if (camera == PackageManager.PERMISSION_GRANTED){
-            cameraPermissionGranted = true
+            permissionGranted = true
         }
         else {
             makeRequest()
@@ -46,7 +55,7 @@ class ToDoListActivity : AppCompatActivity() {
     fun makeRequest(){
         val camera = Manifest.permission.CAMERA
 
-        ActivityCompat.requestPermissions(this, arrayOf(camera), cameraPermissionCode)
+        ActivityCompat.requestPermissions(this, arrayOf(camera), permissionCode)
     }
 
     override fun onRequestPermissionsResult(
@@ -56,7 +65,7 @@ class ToDoListActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            cameraPermissionGranted = true
+            permissionGranted = true
         }
     }
 
