@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -17,9 +18,6 @@ class ToDoListActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityToDoListBinding
 
-    public var permissionGranted = false
-    public val permissionCode = 100
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -29,44 +27,7 @@ class ToDoListActivity : AppCompatActivity() {
         this.supportActionBar?.hide() // hides the toolbar from home page
 
         binding.backButton.setOnClickListener { navToHome() }
-        checkPermissions()
-        binding.cameraButton.setOnClickListener {
-            if (permissionGranted) {
-                openCamera()
-            }
-            else {
-                Toast.makeText(this,"No Permission", Toast.LENGTH_LONG).show()
-            }
-        }
-
-    }
-
-    fun checkPermissions(){
-        val camera = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-
-        if (camera == PackageManager.PERMISSION_GRANTED){
-            permissionGranted = true
-        }
-        else {
-            makeRequest()
-        }
-    }
-
-    fun makeRequest(){
-        val camera = Manifest.permission.CAMERA
-
-        ActivityCompat.requestPermissions(this, arrayOf(camera), permissionCode)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            permissionGranted = true
-        }
+        binding.cameraButton.setOnClickListener { navToCamera() }
     }
 
     private fun navToHome(){
@@ -75,10 +36,9 @@ class ToDoListActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun openCamera(){
-        // open Camera
-        val openCameraIntent: Intent = Intent(this, AddPhotoActivity::class.java)
-        startActivity(openCameraIntent)
+    private fun navToCamera(){
+        // go to the add photo page
+        val intent: Intent = Intent(this, AddPhotoActivity::class.java)
+        startActivity(intent)
     }
-
 }
