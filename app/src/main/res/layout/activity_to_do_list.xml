@@ -99,7 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:contentDescription="add_photo"
-        android:text="(Optional) Add a photo of your pet from today"
+        android:text="Add a photo of your pet from today"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
